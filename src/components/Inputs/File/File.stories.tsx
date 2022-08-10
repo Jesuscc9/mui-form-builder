@@ -1,21 +1,23 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ChangeEvent, useState } from 'react';
-import { TextInput } from './File';
+import { FileInput } from './File';
 
-const meta: ComponentMeta<typeof TextInput> = {
-    component: TextInput,
+const meta: ComponentMeta<typeof FileInput> = {
+    component: FileInput,
 };
+
 export default meta;
 
-const Template: ComponentStory<typeof TextInput> = args => {
+const Template: ComponentStory<typeof FileInput> = args => {
     const [value, setValue] = useState('')
 
     return (
-        <TextInput
+        <FileInput
             {...args}
-            label="Outlined select"
+            label="File Input"
             name="value"
-            value={value}
+            
+            inputProps={{ multiple: true }}
             onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
         />
     )
@@ -23,16 +25,9 @@ const Template: ComponentStory<typeof TextInput> = args => {
 
 export const Standard = Template.bind({})
 Standard.args = {
-    variant: 'standard',
+    variant: 'normal',
     label: 'Standard Input',
-    placeholder: 'Type'
-}
-
-export const Outlined = Template.bind({})
-Outlined.args = {
-    variant: 'outlined',
-    label: 'OutlinedInput',
-    placeholder: 'Type'
+    loading: false
 }
 
 export const Error = Template.bind({})

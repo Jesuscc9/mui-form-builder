@@ -20,13 +20,16 @@ import {
 	Button,
 	ExtendButtonBase,
 	ButtonTypeMap,
+	CircularProgress,
 } from "@mui/material";
 import { InputPropsType } from "src/types";
 import { useStyles } from "./File.styles";
 
 export type FileInputProps = InputPropsType & {
 	error?: any;
+	onChange: any;
 	variant?: "big" | "normal";
+	loading?: boolean;
 	formLabelProps?: FormLabelProps;
 	buttonProps: ExtendButtonBase<ButtonTypeMap<{}, "button">>;
 	inputProps: DetailedHTMLProps<
@@ -35,16 +38,7 @@ export type FileInputProps = InputPropsType & {
 	>;
 };
 
-interface VariantComponentType {
-	[name: string]: ComponentType;
-}
-
-const variantComponent: VariantComponentType = {
-	standard: Input,
-	outlined: OutlinedInput,
-};
-
-export function TextInput({
+export function FileInput({
 	name,
 	label,
 	variant = "normal",
@@ -53,15 +47,22 @@ export function TextInput({
 	formLabelProps,
 	buttonProps,
 	inputProps,
+	loading = false,
 }: FileInputProps) {
 	const classes = useStyles();
 
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (!e?.target?.files || !e?.target?.files[0]) return;
-		setSelectedFile(e.target.files[0]);
+		if (!e?.target?.files) return;
+		setSelectedFiles(e.target.files);
 	};
+
+	const fileNames =
+		selectedFiles &&
+		Array.from(selectedFiles)
+			.map((e) => e.name)
+			.join(",");
 
 	return (
 		<FormControl fullWidth error={touched && error}>
@@ -76,7 +77,13 @@ export function TextInput({
 			)}
 
 			<Button variant="contained" component="label" {...buttonProps}>
-				{!selectedFile ? "Upload file" : selectedFile.name}
+				{loading ? (
+					<div style={{ color: '#fff' }}>
+						<CircularProgress color="inherit" size={18} />
+					</div>
+				) : (
+					<>{!selectedFiles ? "Upload file" : fileNames}</>
+				)}
 				<input
 					type="file"
 					hidden
