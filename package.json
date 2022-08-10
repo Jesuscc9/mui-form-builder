@@ -1,13 +1,16 @@
 {
-  "name": "mui-form-builder",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@rodolfordz11/mui-form-builder",
+  "private": false,
+  "version": "0.0.3",
   "type": "module",
+  "description": "A library of React components for creating dynamic forms",
+  "author": "RodolfoRdz11",
+  "license": "MIT",
+  "repository": "https://github.com/RodolfoRdz11/mui-form-builder",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\"",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -39,7 +42,6 @@
     "vite": "^3.0.0",
     "vite-plugin-dts": "^1.4.1"
   },
-  "license": "MIT",
   "peerDependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
@@ -60,5 +62,8 @@
       "import": "./dist/mui-form-builder.es.js",
       "require": "./dist/mui-form-builder.umd.js"
     }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
