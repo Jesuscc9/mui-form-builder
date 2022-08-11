@@ -1,27 +1,20 @@
 import {
 	ChangeEvent,
-	ChangeEventHandler,
-	ComponentType,
 	DetailedHTMLProps,
 	InputHTMLAttributes,
-	ReactEventHandler,
-	useEffect,
 	useState,
 } from "react";
 import {
 	FormControl,
 	FormLabel,
-	Input,
 	FormHelperText,
-	OutlinedInput,
-	StandardTextFieldProps,
-	OutlinedTextFieldProps,
 	FormLabelProps,
 	Button,
 	ExtendButtonBase,
 	ButtonTypeMap,
 	CircularProgress,
 } from "@mui/material";
+import { ButtonProps } from "@mui/material";
 import { InputPropsType } from "src/types";
 import { useStyles } from "./File.styles";
 
@@ -31,7 +24,7 @@ export type FileInputProps = InputPropsType & {
 	variant?: "big" | "normal";
 	loading?: boolean;
 	formLabelProps?: FormLabelProps;
-	buttonProps: ExtendButtonBase<ButtonTypeMap<{}, "button">>;
+	buttonProps: ButtonProps;
 	inputProps: DetailedHTMLProps<
 		InputHTMLAttributes<HTMLInputElement>,
 		HTMLInputElement
@@ -48,12 +41,14 @@ export function FileInput({
 	buttonProps,
 	inputProps,
 	loading = false,
+	onChange,
 }: FileInputProps) {
 	const classes = useStyles();
 
 	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		onChange(e)
 		if (!e?.target?.files) return;
 		setSelectedFiles(e.target.files);
 	};
@@ -63,6 +58,7 @@ export function FileInput({
 		Array.from(selectedFiles)
 			.map((e) => e.name)
 			.join(",");
+
 
 	return (
 		<FormControl fullWidth error={touched && error}>
@@ -78,11 +74,27 @@ export function FileInput({
 
 			<Button variant="contained" component="label" {...buttonProps}>
 				{loading ? (
-					<div style={{ color: '#fff' }}>
+					<div style={{ color: "#fff" }}>
 						<CircularProgress color="inherit" size={18} />
 					</div>
 				) : (
-					<>{!selectedFiles ? "Upload file" : fileNames}</>
+					<>
+						{!selectedFiles ? (
+							"Upload file"
+						) : (
+							<div
+								style={{
+									overflow: "hidden",
+									textOverflow: "ellipsis",
+									whiteSpace: "nowrap",
+								}}
+							>
+								<b style={{ fontWeight: "normal" }}>
+									{fileNames}
+								</b>
+							</div>
+						)}
+					</>
 				)}
 				<input
 					type="file"
